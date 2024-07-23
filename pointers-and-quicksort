@@ -1,0 +1,89 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+
+using namespace std;
+
+int arraySize = 20;     //Array size : change integer to have more values sorted
+
+int partition(int *quickPointer, int p, int r)
+{
+    int tempArray[arraySize];  //new array to pass values into
+    
+    for(int k = 0; k < arraySize; k++)      //Using pointer to pass values into new array
+    {
+        tempArray[k] = *(quickPointer + k);        //Use tempArray and pointer to pass values back to original through pointer
+    }
+    
+    int i = p - 1;      //line 2 of psuedocode in slides
+    
+    for(int j = p; j < r; j++)      //line 3 of psuedocode in slides
+    {
+        if(tempArray[j] <= tempArray[r])
+        {
+            i = i + 1;
+            
+            //Swapping : line 6
+            int tempLoop = tempArray[i];
+            tempArray[i] = tempArray[j];
+            tempArray[j] = tempLoop; 
+        }
+    }
+    
+    //swapping : line 7
+    int tempPar = tempArray[r]; 
+    tempArray[r] = tempArray[i + 1];
+    tempArray[i + 1] = tempPar;
+    
+    for(int n = 0; n < arraySize; n++)      
+    {
+        *(quickPointer + n) = tempArray[n];     //Use tempArray and pointer to pass values back to original through pointer
+    }
+    
+    return (i + 1); 
+    
+}
+
+void quicksort(int *quickPointer, int p, int r)
+{
+    if(p < r)
+    {
+        int q = partition(quickPointer, p, r);
+        quicksort(quickPointer, p, (q - 1));
+        quicksort(quickPointer, (q + 1), r);
+    }
+    
+    return;
+}
+
+int main()
+{
+    int quickArray[arraySize];      //Generates array of equal to arraySize
+    
+    int *quickPointer = &quickArray[0];    //Setting pointer for passing array into function 
+    
+    srand(time(NULL));      //random seed: allows for true random number generation
+    
+    for(int i = 0; i < arraySize; i++)
+    {
+        quickArray[i] = (rand() % 100);     //Generates random values for quickArray
+    }
+    
+    cout << "The initial array for this quicksort is: ";
+    
+    for(int i = 0; i < arraySize; i++)      //Displays initial array
+    {
+        cout << quickArray[i] << ' ';
+    }
+    
+    quicksort(quickPointer, 0, (arraySize - 1));    //initial call
+
+    cout << "\n\nThe sorted array for this quicksort is: ";
+    
+    for(int m = 0; m < arraySize; m++)              //Displays sorted array
+    {
+        cout << quickArray[m] << ' ';
+    }
+    
+    return 0;
+}
