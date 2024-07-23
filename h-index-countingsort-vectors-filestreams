@@ -1,0 +1,117 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <stdlib.h>
+
+using namespace std;
+
+void countingSort(int *pointerA, int n, int k)
+{
+    int tempArrayA[n];  //new array to pass values into; n is the size of array A and B
+    
+    for(int i = 0; i < n; i++)
+    {
+        tempArrayA[i] = 0;
+    }
+    
+    for(int l = 0; l < n; l++)      //Using pointer to pass values into new array
+    {
+        tempArrayA[l] = *(pointerA + l);        //Use tempArray and pointer to pass values back to original through pointer
+    }
+    
+    int B[n];   //initialize array B
+    int C[k + 1];   //initialize storage array
+    
+    for(int i = 0; i <= k; i++)  //1st for loop
+    {
+        C[i] = 0;
+    }
+    
+    for(int j = 0; j < n; j++)  //2nd for loop
+    {
+        C[tempArrayA[j]] = C[tempArrayA[j]] + 1;
+    }
+    
+    for(int m = 1; m < k ; m++)  //3rd for loop
+    {
+        C[m] = C[m] + C[m - 1];
+    }
+    
+    for(int p = (n - 1); p >= 0; p--) //4th for loop
+    {
+        B[C[tempArrayA[p]]] = tempArrayA[p];
+        C[tempArrayA[p]] = C[tempArrayA[p]] - 1;
+    }
+    
+    for(int r = 0; r < n; r++)      //parse array B back into array A
+    {
+        *(pointerA + r) = B[r];
+    }
+    
+    return;
+}
+
+int main ()
+{
+    int h_Index = 0;    //variable to be used after countingSort
+    
+    vector<int> citArray;     //vector that acts as our array
+    ifstream citationFile("citation.txt", ios::in);	//allows file to input
+  
+    int storageVar = 0;   //temp var
+  
+    while(citationFile >> storageVar)     //streams into vector
+    {
+        citArray.push_back(storageVar);   //pulls value from file while increasing size at every iteration
+    }
+
+    citationFile.close();       //close file 
+    
+    int arrayA[citArray.size()];
+
+    int sizeA = sizeof(arrayA) / sizeof(arrayA[0]);     //size of array as variable rather than using vector length
+    int *pointerA = &arrayA[0];                         //points to A
+    
+    for(int j = 0; j < sizeA; j++)    //turn vector into array
+    {
+        arrayA[j] = citArray[j];
+    }
+    
+    int max = 0;        //var. max for the next for loop; also used as k val. for count. sort
+    
+    for(int f = 0; f < sizeA; f++)
+    {
+        if(arrayA[f] > max)
+        {
+            max = arrayA[f];
+        }
+    }
+    
+    
+    countingSort(pointerA, sizeA, max);    //function call
+    
+    for(int i = 0; i < sizeA / 2; i++)  // reversing order after sort
+    {
+        int temp = arrayA[i];
+        arrayA[i] = arrayA[sizeA - i - 1];
+        arrayA[sizeA - i - 1] = temp;
+    }
+    
+    for(int i = 0; i < sizeA; i++) //Display array
+    {
+        cout << arrayA[i] << ' ';
+    }
+    
+    for(int i = 0; i < sizeA; i++) //find h_Index
+    {
+        if(i > arrayA[i])
+        {
+            h_Index = i - 1; 
+            i = sizeA;
+        }
+    }
+    
+    cout << "\nThe h-index for this researcher is: " << h_Index << endl;
+    
+    return 0;
+}
