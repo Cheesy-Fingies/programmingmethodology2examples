@@ -1,0 +1,58 @@
+#include <iostream>
+#include <fstream>
+#include <vector> 
+
+using namespace std;
+
+vector<string> d;
+
+int dContains(string word)
+{
+    for (int i = 0; i < d.size(); i++)
+        if (d[i].compare(word) == 0)
+            return true;
+    return false;
+}
+
+void wordBreak(string s, int n, string results)           //WORDBREAK
+{
+    
+    for(int i = 1; i <= n ;i++ )
+    {
+        string finder = s.substr(0, i);
+       
+        if(dContains(finder))
+        {
+            if(i == n)
+            {
+                results += finder;
+                cout << results << endl;
+                return;
+            }
+            wordBreak(s.substr(i , n - i), n - i , results + finder + " "); 
+        }
+    }  
+}
+
+
+int main()          //MAIN
+{
+    string s;
+    string line;
+    
+    ifstream fileInput("apples.txt");
+    getline(fileInput, s);
+    
+    if (fileInput.is_open())
+    {
+        while ( getline (fileInput,line) )
+        {
+            d.push_back(line);
+        }
+        fileInput.close();
+    }
+    
+    wordBreak(s, s.size(), "");
+   
+    return 0;
+}
