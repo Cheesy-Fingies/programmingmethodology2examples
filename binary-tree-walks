@@ -1,0 +1,76 @@
+#include <iostream>
+
+using namespace std;
+
+struct Node         //node data type
+{                           
+    int data;
+    struct Node *left, *right;
+};
+
+Node* newNode(int data)         //creation function for node
+{
+    Node* temp = new Node;
+    temp->data = data;
+    temp->left = temp->right = NULL;
+    return temp;
+}
+
+void inorderTreeWalk(struct Node* node)        //prints inorder tree walk
+{
+    if (node == NULL)
+    {
+        return;
+    }
+    
+    inorderTreeWalk(node->left);
+    cout << node->data << " ";
+    inorderTreeWalk(node->right);
+}
+
+void preorderTreeWalk(struct Node* node)        //prints preorder tree walk
+{
+    if (node == NULL)
+    {
+        return;
+    }
+    
+    cout << node->data << " ";
+    preorderTreeWalk(node->left);
+    preorderTreeWalk(node->right);
+}
+
+void postorderTreeWalk(struct Node* node)        //prints postorder tree walk
+{
+    if (node == NULL)
+    {
+        return;
+    }
+    
+    postorderTreeWalk(node->left);
+    postorderTreeWalk(node->right);
+    cout << node->data << " ";
+}
+
+
+int main()
+{
+    struct Node* root = newNode(10);            //Setting binary tree                  
+    root->left = newNode(2);                                
+    root->right = newNode(19);                             
+    root->right->left = newNode(15);        
+    root->right->right = newNode(30);                          
+    root->right->right->left = newNode(20);     
+    root->right->right->right = newNode(40);    
+
+    cout << "\nInorder-tree-walk produces: ";   //inorder tree walk call
+    inorderTreeWalk(root);
+    
+    cout << "\npreorder-tree-walk produces: ";   //preorder tree walk call
+    preorderTreeWalk(root);
+    
+    cout << "\npostorder-tree-walk produces: ";     //postorder tree walk
+    postorderTreeWalk(root);
+    
+    return 0;
+}
