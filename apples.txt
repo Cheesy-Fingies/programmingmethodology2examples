@@ -1,0 +1,8 @@
+ireallylikeapples
+i
+orange
+like
+really
+apples
+banana
+//check for spaces after words!!!
